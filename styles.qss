@@ -1,0 +1,323 @@
+:root {
+    --primary: #4361ee;
+    --primary-light: #4895ef;
+    --primary-dark: #3f37c9;
+    --accent: #f72585;
+    --success: #4cc9f0;
+    --danger: #f72585;
+    --background: #f8f9fa;
+    --surface: #ffffff;
+    --text: #2b2d42;
+    --text-secondary: #6c757d;
+    --border: #e9ecef;
+}
+
+QMainWindow {
+    background-color: var(--background);
+}
+
+QWidget {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 13px;
+}
+
+QPushButton {
+    padding: 8px 20px;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    min-width: 100px;
+    min-height: 36px;
+    font-size: 13px;
+    margin: 1px;
+}
+
+QPushButton:hover {
+    background-color: var(--primary-light);
+    margin: 0px;
+    border: 1px solid var(--primary);
+}
+
+QPushButton:pressed {
+    background-color: var(--primary-dark);
+    margin: 2px 0px 0px 2px;
+}
+
+QPushButton:disabled {
+    background-color: #e9ecef;
+    color: #adb5bd;
+    margin: 1px;
+}
+
+QPushButton#icon-button {
+    min-width: 36px;
+    width: 36px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--primary-light);
+}
+
+QPushButton#icon-button:hover {
+    background-color: var(--primary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+QPushButton#icon-button:pressed {
+    background-color: var(--primary-dark);
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+QLineEdit {
+    padding: 8px 16px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: var(--surface);
+    selection-background-color: var(--primary-light);
+    selection-color: white;
+    min-height: 40px;
+}
+
+QLineEdit:focus {
+    border-color: var(--primary);
+    background-color: var(--surface);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+QLineEdit:hover {
+    border-color: var(--primary-light);
+    background-color: #fafbfc;
+}
+
+QFrame#search-container {
+    background-color: var(--surface);
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    margin: 4px 0;
+}
+
+QFrame#search-container:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+}
+
+QFrame#search-container QLineEdit {
+    border: none;
+    background: transparent;
+    padding-left: 0;
+}
+
+QScrollArea {
+    border: none;
+    background-color: var(--surface);
+    border-radius: 12px;
+}
+
+QScrollBar:vertical {
+    border: none;
+    background: #f0f2f5;
+    width: 14px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #d1d5db;
+    min-height: 40px;
+    border-radius: 7px;
+    margin: 2px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #9ca3af;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+
+QLabel {
+    color: var(--text);
+}
+
+QFrame {
+    background-color: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+QFrame#toolbar {
+    background-color: var(--surface);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+QPushButton#zoom-button {
+    min-width: 36px;
+    width: 36px;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: var(--primary-light);
+}
+
+QPushButton#zoom-button:hover {
+    background-color: var(--primary);
+    transform: translateY(-1px);
+}
+
+QLabel#page-counter {
+    padding: 0 16px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-weight: 600;
+    color: var(--text);
+    min-height: 36px;
+    line-height: 36px;
+    font-size: 13px;
+}
+
+QLabel#dashboard-title {
+    color: var(--text);
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+QPushButton#clear-history {
+    background-color: var(--danger);
+    min-width: 36px;
+    width: 36px;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+QPushButton#clear-history:hover {
+    background-color: #e5007a;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(247, 37, 133, 0.2);
+}
+
+QPushButton#clear-history:pressed {
+    background-color: #d10070;
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+QFrame#files-container {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 16px;
+}
+
+QFrame#file-link-container {
+    background-color: var(--surface);
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 8px;
+    margin: 2px 0;
+}
+
+QFrame#file-link-container:hover {
+    background-color: #f8f9fa;
+    border-color: var(--border);
+    transform: translateX(4px);
+}
+
+QLabel.file-link {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+QLabel.file-link:hover {
+    color: var(--primary-dark);
+}
+
+QFrame#no-files-container {
+    padding: 32px;
+    background-color: transparent;
+    border: none;
+}
+
+QLabel#no-files {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 16px;
+}
+
+QLabel#hint-text {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+QTabWidget#pdf-tabs {
+    background-color: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+
+QTabWidget#pdf-tabs::pane {
+    border: none;
+    background-color: var(--surface);
+    border-radius: 12px;
+}
+
+QTabWidget#pdf-tabs QTabBar::tab {
+    background-color: #f8f9fa;
+    color: var(--text);
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin-right: 2px;
+    font-weight: 500;
+    min-width: 100px;
+}
+
+QTabWidget#pdf-tabs QTabBar::tab:selected {
+    background-color: var(--surface);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+QTabWidget#pdf-tabs QTabBar::tab:hover:!selected {
+    background-color: var(--surface);
+    border-color: var(--primary-light);
+    color: var(--primary-light);
+}
+
+QTabWidget#pdf-tabs QTabBar::close-button {
+    image: url(${fa5s.times});
+    subcontrol-position: right;
+    subcontrol-origin: padding;
+    margin-left: 4px;
+}
+
+QTabWidget#pdf-tabs QTabBar::close-button:hover {
+    background-color: var(--danger);
+    border-radius: 4px;
+}
+
+QFrame#pdf-controls {
+    background-color: transparent;
+    border: none;
+}
+
+* {
+    transition: all 0.2s ease-in-out;
+} 

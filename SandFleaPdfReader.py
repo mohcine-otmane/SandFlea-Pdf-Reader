@@ -37,12 +37,15 @@ class PDFTab(QWidget):
 class PDFViewer(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("PDF Viewer")
+        self.setWindowTitle("SandFlea PDF Reader")
         self.setGeometry(100, 100, 1024, 768)
         self.setWindowIcon(qta.icon('fa5s.file-pdf', color='#4361ee'))
         
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        style_path = os.path.join(script_dir, 'styles.qss')
+        
         try:
-            with open('styles.qss', 'r') as f:
+            with open(style_path, 'r') as f:
                 self.setStyleSheet(f.read())
         except FileNotFoundError:
             print("Warning: styles.qss not found. Using default styling.")
@@ -55,7 +58,7 @@ class PDFViewer(QMainWindow):
         self.scroll_timer.setSingleShot(True)
         self.scroll_timer.timeout.connect(self.reset_scroll_threshold)
         
-        self.settings = QSettings('PDFViewer', 'RecentFiles')
+        self.settings = QSettings('SandFleaPDFReader', 'RecentFiles')
         self.recent_files = self.settings.value('recent_files', [])
         if self.recent_files is None:
             self.recent_files = []

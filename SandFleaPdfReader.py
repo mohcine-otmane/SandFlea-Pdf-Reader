@@ -4,7 +4,7 @@ import os
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                             QHBoxLayout, QPushButton, QFileDialog, QLabel,
                             QScrollArea, QMenu, QGridLayout, QFrame, QLineEdit,
-                            QSizePolicy, QMessageBox, QTabWidget)
+                            QSizePolicy, QMessageBox, QTabWidget, QSlider)
 from PyQt6.QtCore import Qt, QTimer, QSettings, QSize
 from PyQt6.QtGui import QPixmap, QImage, QWheelEvent, QAction, QIcon, QFont, QColor, QPalette
 import qtawesome as qta
@@ -57,6 +57,12 @@ class PDFViewer(QMainWindow):
         self.scroll_timer = QTimer()
         self.scroll_timer.setSingleShot(True)
         self.scroll_timer.timeout.connect(self.reset_scroll_threshold)
+        
+        self.settings = QSettings('SandFleaPDFReader', 'Settings')
+        self.continuous_scroll = self.settings.value('continuous_scroll', False, type=bool)
+        self.scroll_speed = self.settings.value('scroll_speed', 50, type=int)
+        self.scroll_timer = QTimer()
+        self.scroll_timer.timeout.connect(self.continuous_scroll_update)
         
         self.settings = QSettings('SandFleaPDFReader', 'RecentFiles')
         self.recent_files = self.settings.value('recent_files', [])
@@ -154,6 +160,49 @@ class PDFViewer(QMainWindow):
         self.page_counter_label.setObjectName("page-counter")
         self.page_counter_label.setFixedHeight(36)
         pdf_controls_layout.addWidget(self.page_counter_label)
+        
+        scroll_controls = QHBoxLayout()
+        scroll_controls.setSpacing(4)
+        
+        self.scroll_up_button = QPushButton()
+        self.scroll_up_button.setObjectName("icon-button")
+        scroll_up_icon = qta.icon('fa5s.arrow-up', color='white')
+        self.scroll_up_button.setIcon(scroll_up_icon)
+        self.scroll_up_button.setIconSize(QSize(16, 16))
+        self.scroll_up_button.setToolTip("Scroll Up")
+        self.scroll_up_button.clicked.connect(self.scroll_up)
+        scroll_controls.addWidget(self.scroll_up_button)
+        
+        self.scroll_down_button = QPushButton()
+        self.scroll_down_button.setObjectName("icon-button")
+        scroll_down_icon = qta.icon('fa5s.arrow-down', color='white')
+        self.scroll_down_button.setIcon(scroll_down_icon)
+        self.scroll_down_button.setIconSize(QSize(16, 16))
+        self.scroll_down_button.setToolTip("Scroll Down")
+        self.scroll_down_button.clicked.connect(self.scroll_down)
+        scroll_controls.addWidget(self.scroll_down_button)
+        
+        self.continuous_scroll_button = QPushButton()
+        self.continuous_scroll_button.setObjectName("icon-button")
+        self.continuous_scroll_button.setIcon(qta.icon('fa5s.sync', color='white'))
+        self.continuous_scroll_button.setIconSize(QSize(16, 16))
+        self.continuous_scroll_button.setToolTip("Toggle Continuous Scroll")
+        self.continuous_scroll_button.setCheckable(True)
+        self.continuous_scroll_button.setChecked(self.continuous_scroll)
+        self.continuous_scroll_button.clicked.connect(self.toggle_continuous_scroll)
+        scroll_controls.addWidget(self.continuous_scroll_button)
+        
+        self.scroll_speed_slider = QSlider(Qt.Orientation.Horizontal)
+        self.scroll_speed_slider.setObjectName("scroll-speed-slider")
+        self.scroll_speed_slider.setMinimum(10)
+        self.scroll_speed_slider.setMaximum(200)
+        self.scroll_speed_slider.setValue(self.scroll_speed)
+        self.scroll_speed_slider.setToolTip("Scroll Speed")
+        self.scroll_speed_slider.valueChanged.connect(self.update_scroll_speed)
+        self.scroll_speed_slider.setFixedWidth(100)
+        scroll_controls.addWidget(self.scroll_speed_slider)
+        
+        pdf_controls_layout.addLayout(scroll_controls)
         
         zoom_controls = QHBoxLayout()
         zoom_controls.setSpacing(4)
@@ -258,6 +307,8 @@ class PDFViewer(QMainWindow):
         self.next_button.setEnabled(False)
         self.zoom_in_button.setEnabled(False)
         self.zoom_out_button.setEnabled(False)
+        self.scroll_up_button.setEnabled(False)
+        self.scroll_down_button.setEnabled(False)
         
     def show_pdf_viewer(self):
         self.dashboard_widget.hide()
@@ -429,11 +480,15 @@ class PDFViewer(QMainWindow):
             self.next_button.setEnabled(tab.current_page < len(tab.current_doc) - 1)
             self.zoom_in_button.setEnabled(True)
             self.zoom_out_button.setEnabled(True)
+            self.scroll_up_button.setEnabled(True)
+            self.scroll_down_button.setEnabled(True)
         else:
             self.prev_button.setEnabled(False)
             self.next_button.setEnabled(False)
             self.zoom_in_button.setEnabled(False)
             self.zoom_out_button.setEnabled(False)
+            self.scroll_up_button.setEnabled(False)
+            self.scroll_down_button.setEnabled(False)
     
     def prev_page(self):
         tab = self.get_current_tab()
@@ -506,6 +561,46 @@ class PDFViewer(QMainWindow):
     
     def get_current_tab(self):
         return self.tab_widget.currentWidget()
+
+    def scroll_up(self):
+        tab = self.get_current_tab()
+        if tab:
+            scrollbar = tab.scroll_area.verticalScrollBar()
+            scrollbar.setValue(scrollbar.value() - self.scroll_speed)
+
+    def scroll_down(self):
+        tab = self.get_current_tab()
+        if tab:
+            scrollbar = tab.scroll_area.verticalScrollBar()
+            scrollbar.setValue(scrollbar.value() + self.scroll_speed)
+
+    def toggle_continuous_scroll(self):
+        self.continuous_scroll = self.continuous_scroll_button.isChecked()
+        self.settings.setValue('continuous_scroll', self.continuous_scroll)
+        
+        if self.continuous_scroll:
+            self.scroll_timer.start(50)  # Update every 50ms
+        else:
+            self.scroll_timer.stop()
+    
+    def update_scroll_speed(self, value):
+        self.scroll_speed = value
+        self.settings.setValue('scroll_speed', value)
+    
+    def continuous_scroll_update(self):
+        if self.continuous_scroll:
+            tab = self.get_current_tab()
+            if tab:
+                scrollbar = tab.scroll_area.verticalScrollBar()
+                current_value = scrollbar.value()
+                max_value = scrollbar.maximum()
+                
+                if current_value < max_value:
+                    scrollbar.setValue(current_value + self.scroll_speed // 10)
+                else:
+                    # If we reach the bottom, go to next page
+                    self.next_page()
+                    scrollbar.setValue(0)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -71,6 +71,16 @@ QPushButton#icon-button:pressed {
     box-shadow: none;
 }
 
+QPushButton#icon-button:checked {
+    background-color: #4895ef;
+    border: 1px solid #4895ef;
+}
+
+QPushButton#icon-button:checked:hover {
+    background-color: #3a0ca3;
+    border: 1px solid #3a0ca3;
+}
+
 QLineEdit {
     padding: 8px 16px;
     border: 2px solid var(--border);
@@ -316,6 +326,37 @@ QTabWidget#pdf-tabs QTabBar::close-button:hover {
 QFrame#pdf-controls {
     background-color: transparent;
     border: none;
+}
+
+/* Scroll Speed Slider */
+QSlider#scroll-speed-slider {
+    background: transparent;
+    height: 20px;
+}
+
+QSlider#scroll-speed-slider::groove:horizontal {
+    border: 1px solid #4361ee;
+    height: 4px;
+    background: #2b2d42;
+    margin: 0px;
+    border-radius: 2px;
+}
+
+QSlider#scroll-speed-slider::handle:horizontal {
+    background: #4361ee;
+    border: none;
+    width: 12px;
+    margin: -4px 0;
+    border-radius: 6px;
+}
+
+QSlider#scroll-speed-slider::handle:horizontal:hover {
+    background: #4895ef;
+}
+
+QSlider#scroll-speed-slider::sub-page:horizontal {
+    background: #4361ee;
+    border-radius: 2px;
 }
 
 * {
